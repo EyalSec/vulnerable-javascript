@@ -19,6 +19,11 @@
 
 * { box-sizing: border-box; }
 
+/* An author display rule beats the UA sheet's [hidden] { display: none }, so
+   any element this app hides with the hidden attribute needs this. Without it
+   the resume strip is visible and empty on a clean load. */
+[hidden] { display: none !important; }
+
 body {
   margin: 0;
   font: 400 14px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -67,9 +72,11 @@ a { color: var(--accent); }
 .search input:focus { outline: 2px solid #a8ccce; border-color: var(--accent); }
 
 .account { margin-left: auto; display: grid; grid-template-columns: auto 34px;
-           gap: 0 10px; align-items: center; }
-.acct-name { font-weight: 600; color: var(--ink); font-size: 13px; text-align: right; }
-.acct-role { font-size: 11px; color: var(--muted); text-align: right; }
+           gap: 0 10px; align-items: center; flex: 0 0 auto; }
+.acct-name { font-weight: 600; color: var(--ink); font-size: 13px; text-align: right;
+             white-space: nowrap; }
+.acct-role { font-size: 11px; color: var(--muted); text-align: right;
+             white-space: nowrap; }
 .avatar { grid-row: 1 / 3; width: 34px; height: 34px; border-radius: 50%;
           object-fit: cover; background: #d7dee3; }
 
