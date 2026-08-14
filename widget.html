@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<title>Northwind Partner Reports</title>
+<style>
+  body { margin: 0; font: 400 13px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+         color: #3c4a52; background: #f7f9fa; padding: 10px 12px; }
+  .k { color: #7b8792; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
+  .v { font-size: 20px; font-weight: 600; color: #16323d; }
+</style>
+</head>
+<body>
+
+<div class="k">Partner report</div>
+<div class="v">Regional summary</div>
+<p id="status">Sending report to the host page…</p>
+
+<script>
+/*
+ * The "third party" report widget.
+ *
+ * The host page embeds this and trusts whatever comes back over postMessage.
+ * The widget is configured through its own URL, which is how embedded reports
+ * are normally parameterised.
+ *
+ * On GitHub Pages this frame is same origin with its host. That is deliberate:
+ * a cross origin frame is the more realistic shape, but a Pages site only has
+ * one origin, and the flow being demonstrated (postMessage data reaching
+ * innerHTML in the host) is identical either way. See the README.
+ */
+(function () {
+  "use strict";
+
+  var body = "Regional summary is up to date.";
+  var raw = location.hash.slice(1);
+  raw.split("&").forEach(function (pair) {
+    var i = pair.indexOf("=");
+    if (i > 0 && pair.slice(0, i) === "msg") {
+      body = decodeURIComponent(pair.slice(i + 1));
+    }
+  });
+
+  function send() {
+    parent.postMessage({ title: "Regional summary", body: body }, "*");
+    document.getElementById("status").textContent = "Report sent to the host page.";
+  }
+
+  if (parent !== window) { send(); }
+}());
+</script>
+</body>
+</html>
