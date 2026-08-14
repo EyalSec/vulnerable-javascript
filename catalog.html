@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Vulnerability catalogue · Northwind Retail Analytics</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="demo-banner" role="note">
+  <strong>Deliberately vulnerable demo.</strong>
+  This is the operator map for
+  <a href="https://github.com/EyalSec/vulnerable-javascript">EyalSec/vulnerable-javascript</a>.
+  <a class="banner-link" href="index.html">Back to the dashboard</a>
+</div>
+
+<div class="cat-wrap">
+  <h1>Vulnerability catalogue</h1>
+  <p class="cat-intro">
+    Every deliberate flaw in this app, the feature it lives inside, the taint
+    source it starts from and the sink it reaches. Each trigger is a single URL
+    that exercises the flow on load, so the whole catalogue can be driven
+    without clicking anything. This table and the harness in
+    <code>run-eschromium.sh</code> read the same file, <code>catalog.js</code>,
+    so a feature added without a row here shows up as a gap rather than going
+    quietly untested.
+  </p>
+
+  <table class="cat-table">
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>Source</th>
+        <th>Sink</th>
+        <th>Detector</th>
+        <th>Trigger</th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+</div>
+
+<script src="catalog.js"></script>
+<script>
+(function () {
+  "use strict";
+  var body = document.getElementById("rows");
+
+  CATALOG.forEach(function (row) {
+    var tr = document.createElement("tr");
+
+    var feature = document.createElement("td");
+    var name = document.createElement("div");
+    name.className = "cat-feature";
+    name.textContent = row.feature;
+    feature.appendChild(name);
+    var id = document.createElement("div");
+    id.className = "cat-id";
+    id.textContent = row.id;
+    feature.appendChild(id);
+    if (row.note) {
+      var note = document.createElement("div");
+      note.className = "cat-note";
+      note.textContent = row.note;
+      feature.appendChild(note);
+    }
+    if (row.safe) {
+      var safe = document.createElement("div");
+      safe.className = "cat-safe";
+      safe.textContent = "Safe twin: " + row.safe;
+      feature.appendChild(safe);
+    }
+    tr.appendChild(feature);
+
+    var source = document.createElement("td");
+    var sp = document.createElement("span");
+    sp.className = "pill";
+    sp.textContent = row.source;
+    source.appendChild(sp);
+    tr.appendChild(source);
+
+    var sink = document.createElement("td");
+    var sk = document.createElement("span");
+    sk.className = "pill";
+    sk.textContent = row.sink;
+    sink.appendChild(sk);
+    tr.appendChild(sink);
+
+    var det = document.createElement("td");
+    det.className = "cat-id";
+    det.textContent = row.detector;
+    tr.appendChild(det);
+
+    var trig = document.createElement("td");
+    var a = document.createElement("a");
+    a.href = row.trigger;               // the trigger is authored in catalog.js
+    a.textContent = "run it";
+    trig.appendChild(a);
+    var raw = document.createElement("div");
+    raw.className = "cat-id";
+    raw.textContent = row.trigger;      // shown as text, never as markup
+    trig.appendChild(raw);
+    tr.appendChild(trig);
+
+    body.appendChild(tr);
+  });
+}());
+</script>
+</body>
+</html>

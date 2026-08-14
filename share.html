@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Share this view · Northwind Retail Analytics</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="plain">
+
+<div id="demo-banner" role="note">
+  <strong>Deliberately vulnerable demo.</strong>
+  Part of <a href="https://github.com/EyalSec/vulnerable-javascript">EyalSec/vulnerable-javascript</a>.
+</div>
+
+<main class="card">
+  <h1>Share this view</h1>
+  <p>
+    The note you add here is handed back to the dashboard. The handoff uses
+    <code>window.name</code>, which survives the navigation between the two
+    pages, which is precisely why applications reach for it, and why it is a
+    taint source worth tracking.
+  </p>
+
+  <label for="note">Note for the recipient</label>
+  <input id="note" type="text" value="Numbers look right to me.">
+
+  <div class="row">
+    <ul id="recipients" class="plain-list"></ul>
+  </div>
+
+  <button id="go" class="btn btn-primary" type="button">Share and return to the dashboard</button>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  // The demo can preload the note from the fragment so the whole handoff is
+  // reachable from a single URL.
+  var preset = null;
+  var raw = location.hash.slice(1);
+  raw.split("&").forEach(function (pair) {
+    var i = pair.indexOf("=");
+    if (i > 0 && pair.slice(0, i) === "note") {
+      preset = decodeURIComponent(pair.slice(i + 1));
+    }
+  });
+
+  var input = document.getElementById("note");
+  if (preset !== null) { input.value = preset; }
+
+  // SAFE TWIN: the recipient list is rendered with textContent.
+  ["dana@northwind.example", "ops@northwind.example"].forEach(function (who) {
+    var li = document.createElement("li");
+    li.textContent = who;
+    document.getElementById("recipients").appendChild(li);
+  });
+
+  function handoff() {
+    // Park the note where the next page can pick it up, then navigate. The
+    // target is a constant so the navigation itself carries no flow.
+    window.name = input.value;
+    location.href = "index.html#share";
+  }
+
+  document.getElementById("go").addEventListener("click", handoff);
+
+  if (preset !== null) { setTimeout(handoff, 250); }
+}());
+</script>
+</body>
+</html>

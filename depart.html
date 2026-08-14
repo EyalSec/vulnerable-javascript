@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Northwind partner portal</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="plain">
+
+<div id="demo-banner" role="note">
+  <strong>Deliberately vulnerable demo.</strong>
+  Part of <a href="https://github.com/EyalSec/vulnerable-javascript">EyalSec/vulnerable-javascript</a>.
+</div>
+
+<main class="card">
+  <h1>Northwind partner portal</h1>
+  <p>
+    This page exists to be the <em>previous</em> page. It links into the
+    dashboard so that <code>document.referrer</code> is genuinely set, and the
+    dashboard's "back to where you came from" link then navigates using it.
+  </p>
+  <p>
+    <a id="into" href="index.html#back">Open the Northwind dashboard</a>
+  </p>
+  <p class="muted">
+    The link is followed automatically once, so the whole flow runs from this
+    one URL. Loading this page again does not re-trigger it.
+  </p>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  // Follow the link once per session so the flow is reachable from a single
+  // URL, and stop afterwards so the two pages cannot bounce forever.
+  if (!sessionStorage.getItem("nw.departed")) {
+    sessionStorage.setItem("nw.departed", "1");
+    setTimeout(function () { location.href = "index.html#back"; }, 400);
+  }
+}());
+</script>
+</body>
+</html>
