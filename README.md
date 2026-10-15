@@ -77,8 +77,8 @@ ESEVENT where=Element.innerHTML origin=location.hash repr=<img src=x onerror=ale
 `ES2_CHROMIUM_TEST_SINK=1` prints detections to the console and needs no
 dashboard and no token. Three things will trip you up if you drive it by hand:
 the browser stays open like a browser and never exits on its own, so bound
-every run with `timeout` and expect a non-zero exit; `content_shell` folds
-renderer output into stdout, so capture both streams; and the `repr` wraps the
+every run with `timeout` and expect a non-zero exit; detections can arrive on
+either stdout or stderr, so capture both streams; and the `repr` wraps the
 attacker controlled span in two invisible characters (`U+E000` and `U+E001`) so
 you can see exactly which characters were tainted, which means a grep for a
 payload that straddles that boundary will not match as plain text.
