@@ -1,0 +1,52 @@
+# Copy each published image from ghcr.io to Docker Hub as eyalsec/vulnerable-javascript.
+#
+# Off until an EyalSec maintainer creates the Docker Hub organisation "eyalsec"
+# and adds two repository secrets:
+#   DOCKERHUB_USERNAME  the Docker Hub account (or organisation access token owner)
+#   DOCKERHUB_TOKEN     an access token with read and write on eyalsec/vulnerable-javascript
+# Until DOCKERHUB_TOKEN exists every run ends after the first step, green.
+name: Docker Hub mirror
+
+on:
+  workflow_run:
+    workflows: ["Container image"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mirror:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    env:
+      HAS_TOKEN: ${{ secrets.DOCKERHUB_TOKEN != '' }}
+      SOURCE: ghcr.io/eyalsec/vulnerable-javascript
+      TARGET: docker.io/eyalsec/vulnerable-javascript
+    steps:
+      - name: Is Docker Hub configured?
+        run: |
+          if [ "$HAS_TOKEN" != "true" ]; then
+            echo "::notice::DOCKERHUB_TOKEN is not set; skipping the Docker Hub mirror."
+          fi
+
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+        if: env.HAS_TOKEN == 'true'
+
+      - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        if: env.HAS_TOKEN == 'true'
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Copies the multi-architecture index as it is, so the Docker Hub image
+      # has the same digest as the attested ghcr.io one.
+      - name: Copy latest and the commit tag
+        if: env.HAS_TOKEN == 'true'
+        env:
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+        run: |
+          docker buildx imagetools create --tag "$TARGET:latest" "$SOURCE:latest"
+          docker buildx imagetools create --tag "$TARGET:sha-${HEAD_SHA::7}" "$SOURCE:sha-${HEAD_SHA::7}"

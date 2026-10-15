@@ -1,0 +1,7 @@
+.git
+.github
+.devcontainer
+.esc-runs
+Dockerfile
+.dockerignore
+__pycache__

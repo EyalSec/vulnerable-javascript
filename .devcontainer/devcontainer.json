@@ -1,0 +1,19 @@
+{
+  // One click to a running copy of the demo dashboard, served by serve.py.
+  // The port is forwarded privately to you; keep it private.
+  "name": "vulnerable-javascript",
+  "image": "mcr.microsoft.com/devcontainers/python:3.13",
+  "postAttachCommand": "python serve.py",
+  "forwardPorts": [8000],
+  "portsAttributes": {
+    "8000": {
+      "label": "Northwind Retail Analytics (deliberately insecure)",
+      "onAutoForward": "openBrowser"
+    }
+  },
+  "customizations": {
+    "codespaces": {
+      "openFiles": ["README.md", "catalog.js"]
+    }
+  }
+}

@@ -53,6 +53,31 @@ cd vulnerable-javascript
 ./run-eschromium.sh /path/to/es-chromium https://eyalsec.github.io/vulnerable-javascript/
 ```
 
+### Without installing anything
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/EyalSec/vulnerable-javascript)
+[![Open in Ona (formerly Gitpod)](https://ona.com/build-with-ona.svg)](https://app.ona.com/#https://github.com/EyalSec/vulnerable-javascript)
+
+Either button opens a private cloud environment with `serve.py` already
+running on port 8000, which is handy for reading or changing the app. Keep the
+forwarded port private.
+
+### In a container
+
+```bash
+docker run --rm -p 127.0.0.1:8000:8000 ghcr.io/eyalsec/vulnerable-javascript
+./run-eschromium.sh /path/to/es-chromium http://127.0.0.1:8000/
+```
+
+The image serves the same files with `serve.py`, for running the demo offline.
+It is built from `main` for `linux/amd64` and `linux/arm64` by
+[this workflow](.github/workflows/container.yml), with a signed build
+provenance attestation:
+
+```bash
+gh attestation verify oci://ghcr.io/eyalsec/vulnerable-javascript:latest -R EyalSec/vulnerable-javascript
+```
+
 ### Against a local checkout
 
 ```bash
