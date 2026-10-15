@@ -196,7 +196,8 @@ identical either way.
 
 MIT. See [LICENSE](LICENSE). The same terms as
 [EyalSec/vulnerable-python](https://github.com/EyalSec/vulnerable-python), the
-equivalent target for `es-python`.
+equivalent target for `es-python`. This software is intentionally insecure:
+never deploy it to production or expose it to untrusted networks.
 
 Northwind Retail Analytics is not a real company, a real product, or a real
 dataset. It exists to be attacked.
