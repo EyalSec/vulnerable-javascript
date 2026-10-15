@@ -1,5 +1,7 @@
 # vulnerable-javascript
 
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/EyalSec/vulnerable-javascript/badge)](https://scorecard.dev/viewer/?uri=github.com/EyalSec/vulnerable-javascript)
+
 A deliberately vulnerable single page web application, built as a live
 demonstration target for **[es-chromium](https://github.com/EyalSec/es-chromium)**,
 the taint tracking browser from **[EyalSec](https://eyalsec.com)**.
