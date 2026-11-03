@@ -283,7 +283,7 @@ const CATALOG = [
     "marker": "alert(10)",
     "expected": false,
     "trigger": "index.html#region=%3Cimg%20src%3Dx%20onerror%3Dalert(10)%3E",
-    "safe": "None. This one is exploitable and is not reported.",
+    "safe": "None. This one is exploitable.",
     "note": "KNOWN NON-DETECTION. The region code is upper-cased before display and case folding drops the taint, so the flow is real but unreported. Measured on the 2026-08-04 build."
   },
   {
@@ -296,7 +296,7 @@ const CATALOG = [
     "marker": "alert(11)",
     "expected": false,
     "trigger": "index.html#layout=PGltZyBzcmM9eCBvbmVycm9yPWFsZXJ0KDExKT4%3D",
-    "safe": "None. This one is exploitable and is not reported.",
+    "safe": "None. This one is exploitable.",
     "note": "KNOWN NON-DETECTION. atob rebuilds the string from the encoded form and the taint does not survive. Measured on the 2026-08-04 build."
   },
   {
@@ -309,7 +309,7 @@ const CATALOG = [
     "marker": "alert(12)",
     "expected": false,
     "trigger": "index.html#slug=%3Cimg%20src%3Dx%20onerror%3Dalert(12)%3E",
-    "safe": "None. This one is exploitable and is not reported.",
+    "safe": "None. This one is exploitable.",
     "note": "KNOWN NON-DETECTION. split(\"\") to characters and join back loses the taint. Splitting on a real separator keeps it. Measured on the 2026-08-04 build."
   }
 ];

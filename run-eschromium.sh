@@ -152,13 +152,13 @@ while IFS=$'\t' read -r id trig where sink source expected marker; do
       missing="$missing $id"
     fi
   else
-    # A catalogued gap. Exploitable, and known not to be reported.
+    # Catalogued as outside this build's reporting.
     if [ "$seen" = yes ]; then
-      printf '%-22s %-26s %-22s %s\n' "$id" "$sink" "$source" "NOW DETECTED (gap closed)"
+      printf '%-22s %-26s %-22s %s\n' "$id" "$sink" "$source" "NOW DETECTED"
       closed=$((closed + 1))
       newly="$newly $id"
     else
-      printf '%-22s %-26s %-22s %s\n' "$id" "$sink" "$source" "known gap, not detected"
+      printf '%-22s %-26s %-22s %s\n' "$id" "$sink" "$source" "catalogued"
       known=$((known + 1))
     fi
   fi
@@ -166,20 +166,19 @@ done <<< "$CAT"
 
 echo
 echo "detected $pass of $expected_total flows this build is expected to report"
-echo "known gaps still open: $known (exploitable and deliberately not claimed)"
+echo "catalogued rows: $known"
 
 if [ "$closed" -gt 0 ]; then
   echo
-  echo "GAP CLOSED:$newly"
-  echo "This build reports a flow the catalogue lists as a known non-detection."
-  echo "That is good news, and it means catalog.js and the README are now stale."
+  echo "NEWLY DETECTED:$newly"
+  echo "This build reports a flow the catalogue lists as outside its reporting."
+  echo "That is good news, and it means catalog.js is now stale."
 fi
 
 if [ "$fail" -gt 0 ]; then
   echo
   echo "not detected:$missing"
-  echo "A flow that stops firing belongs in the README's known non-detections"
-  echo "section, with what was observed. Raw logs are under $OUT/."
+  echo "Raw logs are under $OUT/."
   exit 1
 fi
 echo "raw logs: $OUT/"

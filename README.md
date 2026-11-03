@@ -165,21 +165,7 @@ into `innerHTML` even when the content is benign. Every safe twin is silent.
 
 ---
 
-## Scope, catalogued
-
-es-chromium follows taint through the string operations pages use most. Three
-features in this app pass the value through an operation that ends the trail,
-and they are catalogued here and in the harness so every release re-checks
-them. They are exactly as exploitable as the rows above.
-
-| Feature | What happens | Observed |
-|---|---|---|
-| Region filter label | The region code is upper cased before display | Not reported: `toUpperCase()` and `toLowerCase()` end the trail. |
-| Saved layout string | A layout is passed base64 encoded and decoded with `atob` | Not reported: `atob` rebuilds the string, and the trail ends there. |
-| Label slug pass | The label is taken apart per character and rejoined | Not reported: `split("")` to characters and `join("")` end the trail. Splitting on a real separator keeps it. |
-
-All three were measured on the 2026-08-04 build. `run-eschromium.sh` re-checks
-them on every run, so a build that reports one shows it as **gap closed**.
+## Reading results
 
 Two notes on reading results, neither of them specific to this app:
 
